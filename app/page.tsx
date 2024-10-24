@@ -10,7 +10,7 @@ import WeatherMonitoring from "./components/Common/ThresholdInput";
 
 export default function Page() {
 
-  const { weatherData, loading, error, unit, setUnit, alerts, setAlerts, setTemperatureThreshold } = useWeather();
+  const { weatherData, loading, unit, setUnit, alerts, setAlerts, setTemperatureThreshold } = useWeather();
   const [lastFetched, setLastFetched] = useState<string | null>(null);
 
   useEffect(() => {

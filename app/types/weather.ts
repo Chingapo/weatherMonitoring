@@ -31,7 +31,12 @@ export interface Weather {
     wind: Wind;
     sys: Sys;
     dt: number;
-  }
+    rain?: Rain;
+}
+
+export interface Rain {
+  '1h'?: number; 
+}
   
   export interface DailySummary {
     avgTemp: number;

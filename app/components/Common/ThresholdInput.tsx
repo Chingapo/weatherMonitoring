@@ -1,5 +1,5 @@
 import { WeatherData } from '@/app/types/weather';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 interface WeatherMonitoringProps {
   weatherData: WeatherData[];

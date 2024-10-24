@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, BarElement, Tooltip, Legend } from 'chart.js';
 import useWeather from '@/app/hooks/useWeather';
@@ -7,7 +7,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 import SwiperCore from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
-SwiperCore.use([Navigation, Pagination]);
+import { WeatherData } from '@/app/types/weather';
+
 
 ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, BarElement, Tooltip, Legend);
 
@@ -32,29 +33,26 @@ interface WeatherChartsProps {
   }
   
   const WeatherCharts: React.FC<WeatherChartsProps> = ({ unit }) => {
+
+    SwiperCore.use([Navigation, Pagination]);
+
     const { weatherData, loading, error } = useWeather();
     const [chartData, setChartData] = useState<ChartData>({
       temperature: { high: [], low: [], avg: [], labels: [] }, // Add avg initialization
       precipitation: { values: [], labels: [] },
       humidity: { values: [], labels: [] },
     });
-  
-    useEffect(() => {
-      if (weatherData.length > 0) {
-        processData(weatherData);
-      }
-    }, [weatherData, unit]); // Include `unit` in the dependencies to trigger re-render
-  
-    const processData = (weatherData: any) => {
+
+    const processData = useCallback((weatherData: WeatherData[]) => {
       const tempHigh: number[] = [];
       const tempLow: number[] = [];
-      const tempAvg: number[] = []; // Initialize avg array
+      const tempAvg: number[] = [];
       const precip: number[] = [];
       const hum: number[] = [];
       const labels: string[] = cities.map((city) => city.name);
   
       for (const city of labels) {
-        const cityWeather = weatherData.find((data: any) => data.name === city);
+        const cityWeather: WeatherData | undefined = weatherData.find((data) => data.name === city); // Specify WeatherData type here
         if (cityWeather) {
           let highTemp = cityWeather.main.temp_max;
           let lowTemp = cityWeather.main.temp_min;
@@ -65,23 +63,30 @@ interface WeatherChartsProps {
             lowTemp += 273.15; // Kelvin to Celsius conversion
           }
   
-          const avgTemp = (highTemp + lowTemp) / 2; // Calculate avg temperature
+          const avgTemp = (highTemp + lowTemp) / 2;
   
           tempHigh.push(highTemp);
           tempLow.push(lowTemp);
-          tempAvg.push(avgTemp); // Add avg temperature to array
-          precip.push(cityWeather.rain?.['1h'] ?? 0);
+          tempAvg.push(avgTemp);
+          precip.push(cityWeather.rain?.['1h'] ?? 0); // Optional chaining for rain data
           hum.push(cityWeather.main.humidity);
         }
       }
   
       setChartData({
-        temperature: { high: tempHigh, low: tempLow, avg: tempAvg, labels }, // Add avg to state
+        temperature: { high: tempHigh, low: tempLow, avg: tempAvg, labels },
         precipitation: { values: precip, labels },
         humidity: { values: hum, labels },
       });
-    };
+    }, [unit]);
   
+    useEffect(() => {
+      if (weatherData.length > 0) {
+        processData(weatherData);
+      }
+    }, [weatherData, unit]); // Include `unit` in the dependencies to trigger re-render
+  
+    
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 

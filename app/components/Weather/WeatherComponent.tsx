@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import useWeather from '../../hooks/useWeather';
 import WeatherItem from './WeatherItem';
 import WeatherCharts from './WeatherCharts';
