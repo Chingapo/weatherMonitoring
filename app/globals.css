@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: white; /* Change to the desired color */
+  width: 40px;  /* Adjust the width */
+  height: 40px; /* Adjust the height */
+}
+
+.swiper-button-next {
+  right: 10px; /* Position the next button */
+}
+
+.swiper-button-prev {
+  left: 10px; /* Position the previous button */
+}
+
+.chart-container {
+  margin-left: 30px; /* Add left margin to avoid overlap */
+}
