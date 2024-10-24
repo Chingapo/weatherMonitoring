@@ -15,6 +15,7 @@ interface ChartData {
   temperature: {
     high: number[];
     low: number[];
+    avg: number[]; // Add avg field
     labels: string[];
   };
   precipitation: {
@@ -33,7 +34,7 @@ interface WeatherChartsProps {
   const WeatherCharts: React.FC<WeatherChartsProps> = ({ unit }) => {
     const { weatherData, loading, error } = useWeather();
     const [chartData, setChartData] = useState<ChartData>({
-      temperature: { high: [], low: [], labels: [] },
+      temperature: { high: [], low: [], avg: [], labels: [] }, // Add avg initialization
       precipitation: { values: [], labels: [] },
       humidity: { values: [], labels: [] },
     });
@@ -47,6 +48,7 @@ interface WeatherChartsProps {
     const processData = (weatherData: any) => {
       const tempHigh: number[] = [];
       const tempLow: number[] = [];
+      const tempAvg: number[] = []; // Initialize avg array
       const precip: number[] = [];
       const hum: number[] = [];
       const labels: string[] = cities.map((city) => city.name);
@@ -63,15 +65,18 @@ interface WeatherChartsProps {
             lowTemp += 273.15; // Kelvin to Celsius conversion
           }
   
+          const avgTemp = (highTemp + lowTemp) / 2; // Calculate avg temperature
+  
           tempHigh.push(highTemp);
           tempLow.push(lowTemp);
+          tempAvg.push(avgTemp); // Add avg temperature to array
           precip.push(cityWeather.rain?.['1h'] ?? 0);
           hum.push(cityWeather.main.humidity);
         }
       }
   
       setChartData({
-        temperature: { high: tempHigh, low: tempLow, labels },
+        temperature: { high: tempHigh, low: tempLow, avg: tempAvg, labels }, // Add avg to state
         precipitation: { values: precip, labels },
         humidity: { values: hum, labels },
       });
@@ -102,6 +107,13 @@ interface WeatherChartsProps {
                       data: chartData.temperature.low,
                       borderColor: 'blue',
                       fill: false,
+                    },
+                    {
+                      label: 'Avg Temperature', // Add avg temperature dataset
+                      data: chartData.temperature.avg,
+                      borderColor: 'orange',
+                      fill: false,
+                      borderDash: [5, 5], // Dashed line for avg temperature
                     },
                   ],
                 }}

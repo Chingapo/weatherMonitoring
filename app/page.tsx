@@ -4,7 +4,8 @@ import UnitSelector from "./components/Common/UnitSelector";
 import AlertSection from "./components/Weather/AlertSection";
 import WeatherComponent from "./components/Weather/WeatherComponent";
 import useWeather from "./hooks/useWeather";
-import ThresholdInput from "./components/Common/ThresholdInput";
+import WeatherMonitoring from "./components/Common/ThresholdInput";
+
 
 
 export default function Page() {
@@ -35,7 +36,8 @@ export default function Page() {
 
         
 
-        <ThresholdInput unit={unit} setAlerts={setAlerts} setTemperatureThreshold={setTemperatureThreshold} />
+        {/* <ThresholdInput unit={unit} setAlerts={setAlerts} setTemperatureThreshold={setTemperatureThreshold} /> */}
+        <WeatherMonitoring weatherData={weatherData} unit={unit} setAlerts={setAlerts} />
         <AlertSection alerts={alerts} />
 
         <WeatherComponent unit={unit}/>
