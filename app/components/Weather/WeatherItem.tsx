@@ -4,6 +4,7 @@ import React from 'react';
 interface WeatherItemProps {
   data: WeatherData;
   unit: 'metric' | 'standard';
+  dominantWeather: string; // New prop for dominant weather
 }
 
 const convertUnixToDateTime = (unixTime: number) => {
@@ -18,7 +19,7 @@ const convertTemperature = (temp: number, unit: 'metric' | 'standard') => {
   return temp.toFixed(2); // Keep Kelvin as it is
 };
 
-const WeatherItem: React.FC<WeatherItemProps> = ({ data, unit }) => {
+const WeatherItem: React.FC<WeatherItemProps> = ({ data, unit, dominantWeather }) => {
   return (
     <div className="bg-black rounded-lg shadow-lg p-6 transition-transform transform hover:scale-105">
       <h2 className="text-2xl font-semibold mb-2">
@@ -32,6 +33,9 @@ const WeatherItem: React.FC<WeatherItemProps> = ({ data, unit }) => {
       </p>
       <p className="text-lg">
         Weather: <strong>{data.weather[0].description}</strong>
+      </p>
+      <p className="text-lg">
+        Dominant Weather Today: <strong>{dominantWeather}</strong> {/* New dominant weather display */}
       </p>
       <p className="text-lg">
         Humidity: <strong>{data.main.humidity}%</strong>

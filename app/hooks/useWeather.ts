@@ -105,7 +105,7 @@ const useWeather = () => {
         };
     }, [unit, temperatureThreshold]);
 
-    return { weatherData, loading, error, unit, setUnit, alerts, setAlerts, setTemperatureThreshold };
+    return { weatherData, loading, error, unit, setUnit, alerts, setAlerts, setTemperatureThreshold, calculateDominantWeather };
 };
 
 export default useWeather;
